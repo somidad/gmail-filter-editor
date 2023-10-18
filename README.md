@@ -1,27 +1,28 @@
-# React + TypeScript + Vite
+## Gmail Filter Editor
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Motivation & Objective
 
-Currently, two official plugins are available:
+- Gmail mobile app does not support filter settings
+- Gmail Filter Editor provides viewing filters and creating one
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Usage
 
-## Expanding the ESLint configuration
+- Click 'Sign in' at the top right corner
+- Allow Gmail Filter Editor to access your Gmail account's labels and filter settings
+- Choose what you want
+  - Click 'Refresh' to update filter list
+  - Click 'Add' to create a new filter
+  - Click 'Delete' to delete the existing filter
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Limitations
 
-- Configure the top-level `parserOptions` property like this:
+- Creating a new filter
+  - 'Apply the label' action is supported only with the existing labels
+  - 'Forward' action is not supported
+  - 'Send Template' action is not supported
+  - 'Applying the filter to matching conversations' is not supported
+- Updating the exsiting filter is not supported
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+### Support me
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+If you feel this is useful, please consider [supporting me](https://buymeacoffee.com/somidad)
