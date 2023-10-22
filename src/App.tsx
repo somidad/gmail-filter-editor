@@ -1,22 +1,24 @@
 import { useEffect, useState } from "react";
+import { Github, Heart, Trash2, RefreshCw, LogIn, LogOut } from "lucide-react";
 import { apiKey, client_id } from "./credentials";
-import { Filter } from "./lib/filter";
 import { FilterAddModModal } from "./FilterAddModModal";
-import { ActionDescription, ParsedAction, parseAction } from "./lib/actions";
-import {
-  CriteriaDescription,
-  ParsedCriteria,
-  parseCriteria,
-} from "./lib/criteria";
-import { CATEGORY_LABELS, Label } from "./lib/labels";
+import { CATEGORY_ID_NAMES, Label } from "./api/labels";
 import { HelpModal } from "./HelpModal";
+import { H3, UL } from "./components/ui/typography";
+import { Button } from "./components/ui/button";
+import { Table, TableBody, TableCell, TableRow } from "./components/ui/table";
+import { Separator } from "./components/ui/separator";
+import { z } from "zod";
+import { Filter } from "./api/filter";
+import { ActionLabel, ParsedAction, parseAction } from "./api/action";
+import { CriteriaLabel } from "./api/criteria";
 
 function App() {
-  const [helpOpened, openHelp] = useState(false);
   const [client, setClient] = useState<any>();
   const [authed, setAuthed] = useState(false);
-  const [customLabels, setCustomLabels] = useState<Label[]>([]);
-  const [filters, setFilters] = useState<Filter[]>([]);
+  const [categories, setCategories] = useState<z.infer<typeof Label>[]>([]);
+  const [customLabels, setCustomLabels] = useState<z.infer<typeof Label>[]>([]);
+  const [filters, setFilters] = useState<z.infer<typeof Filter>[]>([]);
   const [modalOpened, openModal] = useState(false);
 
   async function initGoogleApiClient() {
@@ -57,13 +59,16 @@ function App() {
         if (!response.result) {
           throw Error("response.result does not exist");
         }
-        const labels = response.result.labels as Label[];
+        const labels = z.array(Label).parse(response.result.labels);
+
+        const categories = labels.filter(
+          ({ id, name }) => id === name && id.startsWith("CATEGORY_")
+        );
+        setCategories(categories);
+
         const customLabels = labels
           .filter(({ id, name }) => id !== name)
           .sort((a, b) => a.name.localeCompare(b.name));
-        if (!labels) {
-          throw Error("response.result.labels does not exist");
-        }
         setCustomLabels(customLabels);
       });
   }
@@ -77,10 +82,7 @@ function App() {
         if (!response.result) {
           throw Error("response.result does not exists");
         }
-        const filters = response.result.filter as Filter[];
-        if (!filters) {
-          throw Error("response.result.filter does not exist");
-        }
+        const filters = z.array(Filter).parse(response.result.filter);
         setFilters(filters);
       })
       .catch((reason: any) => {
@@ -93,11 +95,7 @@ function App() {
     getFilterList();
   }
 
-  function addFilter() {
-    openModal(true);
-  }
-
-  function requestToAddFilter(filter: Omit<Filter, "id">) {
+  function requestToAddFilter(filter: Omit<z.infer<typeof Filter>, "id">) {
     (gapi.client as any).gmail.users.settings.filters
       .create({
         userId: "me",
@@ -146,130 +144,123 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <h2>Gmail Filter Editor</h2>
-        <div style={{ display: "flex", gap: "0.5em", alignItems: "center" }}>
-          <a href="#" onClick={() => openHelp(true)}>
-            Help
-          </a>
+    <div className="space-y-4">
+      <div className="flex justify-between">
+        <H3>Gmail Filter Editor</H3>
+        <div className="space-x-2">
+          <HelpModal />
           {authed ? (
-            <a href="#" onClick={signOut}>
-              Sign out
-            </a>
+            <Button variant="outline" onClick={signOut}>
+              <LogOut />
+            </Button>
           ) : (
-            <a href="#" onClick={signIn}>
-              Sign in
-            </a>
+            <Button onClick={signIn}>
+              <LogIn />
+            </Button>
           )}
         </div>
       </div>
       {authed && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            gap: "1em",
-            marginBottom: "0.5em",
-          }}
-        >
-          <a href="#" onClick={refresh}>
-            Refresh
-          </a>
-          <a href="#" onClick={addFilter}>
-            Add
-          </a>
+        <div className="flex justify-end space-x-2">
+          <Button variant="outline" onClick={refresh}>
+            <RefreshCw />
+          </Button>
+          <FilterAddModModal
+            categories={categories}
+            labels={customLabels}
+            open={modalOpened}
+            onOpenChange={openModal}
+            onSave={requestToAddFilter}
+          />
         </div>
       )}
-      {helpOpened && <HelpModal open={helpOpened} onOpenChange={openHelp} />}
-      {modalOpened && (
-        <FilterAddModModal
-          labels={customLabels}
-          open={modalOpened}
-          onOpenChange={openModal}
-          onSave={requestToAddFilter}
-        />
-      )}
-      <table style={{ width: "100%", minHeight: "80vh" }}>
-        <tbody>
+      <Table>
+        <TableBody>
           {filters.map(({ id, criteria, action }) => {
             const parsedAction = parseAction(action);
             return (
-              <tr key={id}>
-                <td>
-                  <div>
-                    <p>
-                      <b>Criteria</b>
-                    </p>
-                    <ul>
-                      {Object.entries(parseCriteria(criteria))
-                        .filter(([, value]) => value)
-                        .map(([key, value]) => (
-                          <li key={key}>
-                            {CriteriaDescription[key as keyof ParsedCriteria]}:{" "}
-                            {typeof value !== "boolean" && value}
-                          </li>
-                        ))}
-                    </ul>
-                  </div>
-                  <div>
-                    <p>
-                      <b>Actions</b>
-                    </p>
-                    <ul>
-                      {Object.entries(parsedAction)
-                        .filter(
-                          ([key, value]) =>
-                            key !== "categorize" &&
-                            key !== "labelToAdd" &&
-                            value
-                        )
-                        .map(([key, value]) => (
-                          <li key={key}>
-                            {ActionDescription[key as keyof ParsedAction]}{" "}
-                            {typeof value === "string" && value}
-                          </li>
-                        ))}
-                      {parsedAction.categorize && (
+              <TableRow key={id}>
+                <TableCell>
+                  <b>Criteria</b>
+                  <UL>
+                    {Object.entries(criteria)
+                      .filter(
+                        ([key, value]) =>
+                          key !== "size" && key !== "sizeComparison" && value
+                      )
+                      .map(([key, value]) => (
+                        <li key={key}>
+                          {CriteriaLabel[key as keyof typeof CriteriaLabel]}
+                          {typeof value === "boolean" ? "" : `: ${value}`}
+                        </li>
+                      ))}
+                    {criteria.sizeComparison !== "unspecified" &&
+                      criteria.size && (
                         <li>
-                          Categorize as{" "}
-                          {CATEGORY_LABELS[
-                            parsedAction.categorize as keyof typeof CATEGORY_LABELS
-                          ] ?? "(unknown)"}
+                          {criteria.sizeComparison} {criteria.size} bytes
                         </li>
                       )}
-                      {parsedAction.labelToAdd && (
-                        <li>
-                          Apply the label:{" "}
-                          {customLabels.find(
-                            ({ id }) => id === parsedAction.labelToAdd
-                          )?.name ?? "(unknown)"}
+                  </UL>
+                  <b>Actions</b>
+                  <UL>
+                    {Object.entries(parsedAction)
+                      .filter(
+                        ([key, value]) =>
+                          key !== "category" && key !== "label" && value
+                      )
+                      .map(([key, value]) => (
+                        <li key={key}>
+                          {
+                            ActionLabel[
+                              key as keyof z.infer<typeof ParsedAction>
+                            ]
+                          }{" "}
+                          {typeof value === "string" && value}
                         </li>
-                      )}
-                    </ul>
-                  </div>
-                </td>
-                <td style={{ width: "6em" }}>
-                  <a href="#" onClick={() => deleteFilter(id)}>
-                    Delete
-                  </a>
-                </td>
-              </tr>
+                      ))}
+                    {parsedAction.category && (
+                      <li>
+                        Categorize as{" "}
+                        {CATEGORY_ID_NAMES[
+                          parsedAction.category as keyof typeof CATEGORY_ID_NAMES
+                        ] ?? "(unknown)"}
+                      </li>
+                    )}
+                    {parsedAction.label && (
+                      <li>
+                        Apply the label:{" "}
+                        {customLabels.find(
+                          ({ id }) => id === parsedAction.label
+                        )?.name ?? "(unknown)"}
+                      </li>
+                    )}
+                  </UL>
+                </TableCell>
+                <TableCell className="flex justify-end">
+                  <Button
+                    variant="destructive"
+                    onClick={() => deleteFilter(id)}
+                  >
+                    <Trash2 />
+                  </Button>
+                </TableCell>
+              </TableRow>
             );
           })}
-        </tbody>
-      </table>
-      <footer style={{ display: "flex", justifyContent: "center", gap: "1em" }}>
+        </TableBody>
+      </Table>
+      <Separator />
+      <div className="flex justify-center space-x-8">
         <a
           href="https://github.com/somidad/gmail-filter-editor"
           target="_blank"
         >
-          GitHub
+          <Github />
         </a>
         <a href="https://buymeacoffee.com/somidad" target="_blank">
-          Support me
+          <Heart />
         </a>
-      </footer>
+      </div>
     </div>
   );
 }
