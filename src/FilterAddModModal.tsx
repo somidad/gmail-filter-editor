@@ -12,6 +12,7 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTrigger,
 } from "./components/ui/dialog";
@@ -23,6 +24,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "./components/ui/form";
 import { useForm } from "react-hook-form";
 import { Input } from "./components/ui/input";
@@ -300,22 +302,28 @@ export function FilterAddModModal({
                     control={form.control}
                     name="archiveOrDelete"
                     render={({ field }) => (
-                      <FormItem className="flex space-x-2 space-y-0">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value.includes("skipInbox")}
-                            onCheckedChange={(checked) => {
-                              return checked
-                                ? field.onChange([...field.value, "skipInbox"])
-                                : field.onChange(
-                                    field.value?.filter(
-                                      (value) => value !== "skipInbox"
-                                    ) ?? []
-                                  );
-                            }}
-                          />
-                        </FormControl>
-                        <FormLabel>Skip the inbox (Archive it)</FormLabel>
+                      <FormItem>
+                        <div className="flex space-x-2 space-y-0">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value.includes("skipInbox")}
+                              onCheckedChange={(checked) => {
+                                return checked
+                                  ? field.onChange([
+                                      ...field.value,
+                                      "skipInbox",
+                                    ])
+                                  : field.onChange(
+                                      field.value?.filter(
+                                        (value) => value !== "skipInbox"
+                                      ) ?? []
+                                    );
+                              }}
+                            />
+                          </FormControl>
+                          <FormLabel>Skip the inbox (Archive it)</FormLabel>
+                        </div>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -397,22 +405,25 @@ export function FilterAddModModal({
                     control={form.control}
                     name="archiveOrDelete"
                     render={({ field }) => (
-                      <FormItem className="flex space-x-2 space-y-0">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value.includes("deleteIt")}
-                            onCheckedChange={(checked) => {
-                              return checked
-                                ? field.onChange([...field.value, "deleteIt"])
-                                : field.onChange(
-                                    field.value?.filter(
-                                      (value) => value !== "deleteIt"
-                                    ) ?? []
-                                  );
-                            }}
-                          />
-                        </FormControl>
-                        <FormLabel>Delete it</FormLabel>
+                      <FormItem>
+                        <div className="flex space-x-2 space-y-0">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value.includes("deleteIt")}
+                              onCheckedChange={(checked) => {
+                                return checked
+                                  ? field.onChange([...field.value, "deleteIt"])
+                                  : field.onChange(
+                                      field.value?.filter(
+                                        (value) => value !== "deleteIt"
+                                      ) ?? []
+                                    );
+                              }}
+                            />
+                          </FormControl>
+                          <FormLabel>Delete it</FormLabel>
+                        </div>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -435,22 +446,28 @@ export function FilterAddModModal({
                     control={form.control}
                     name="importantOrNot"
                     render={({ field }) => (
-                      <FormItem className="flex space-x-2 space-y-0">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value.includes("important")}
-                            onCheckedChange={(checked) => {
-                              return checked
-                                ? field.onChange([...field.value, "important"])
-                                : field.onChange(
-                                    field.value?.filter(
-                                      (value) => value !== "important"
-                                    ) ?? []
-                                  );
-                            }}
-                          />
-                        </FormControl>
-                        <FormLabel>Always mark it as important</FormLabel>
+                      <FormItem>
+                        <div className="flex space-x-2 space-y-0">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value.includes("important")}
+                              onCheckedChange={(checked) => {
+                                return checked
+                                  ? field.onChange([
+                                      ...field.value,
+                                      "important",
+                                    ])
+                                  : field.onChange(
+                                      field.value?.filter(
+                                        (value) => value !== "important"
+                                      ) ?? []
+                                    );
+                              }}
+                            />
+                          </FormControl>
+                          <FormLabel>Always mark it as important</FormLabel>
+                        </div>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -458,25 +475,28 @@ export function FilterAddModModal({
                     control={form.control}
                     name="importantOrNot"
                     render={({ field }) => (
-                      <FormItem className="flex space-x-2 space-y-0">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value.includes("notImportant")}
-                            onCheckedChange={(checked) => {
-                              return checked
-                                ? field.onChange([
-                                    ...field.value,
-                                    "notImportant",
-                                  ])
-                                : field.onChange(
-                                    field.value?.filter(
-                                      (value) => value !== "notImportant"
-                                    ) ?? []
-                                  );
-                            }}
-                          />
-                        </FormControl>
-                        <FormLabel>Never mark it as important</FormLabel>
+                      <FormItem>
+                        <div className="flex space-x-2 space-y-0">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value.includes("notImportant")}
+                              onCheckedChange={(checked) => {
+                                return checked
+                                  ? field.onChange([
+                                      ...field.value,
+                                      "notImportant",
+                                    ])
+                                  : field.onChange(
+                                      field.value?.filter(
+                                        (value) => value !== "notImportant"
+                                      ) ?? []
+                                    );
+                              }}
+                            />
+                          </FormControl>
+                          <FormLabel>Never mark it as important</FormLabel>
+                        </div>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
@@ -529,9 +549,12 @@ export function FilterAddModModal({
                 </div>
               </TabsContent>
             </Tabs>
+            <FormMessage />
           </form>
-          <Button onClick={form.handleSubmit(onSubmit)}>Add</Button>
         </Form>
+        <DialogFooter>
+          <Button onClick={form.handleSubmit(onSubmit)}>Add</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
