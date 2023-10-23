@@ -67,6 +67,11 @@ export function FilterAddModModal({
     resolver: zodResolver(FormSchema),
     defaultValues: FormSchema.parse({}),
   });
+  const sizeComparisonValue = form.watch("sizeComparison");
+  const archiveOrDeleteValue = form.watch("archiveOrDelete");
+  const addLabelValue = form.watch("addLabel");
+  const importantOrNotValue = form.watch("importantOrNot");
+  const categorizeValue = form.watch("categorize");
 
   function onSubmit(values: z.infer<typeof FormSchema>) {
     const {
@@ -288,7 +293,11 @@ export function FilterAddModModal({
                       render={({ field }) => (
                         <FormItem className="flex-1">
                           <FormControl>
-                            <Input placeholder="Size in bytes" {...field} />
+                            <Input
+                              placeholder="Size in bytes"
+                              {...field}
+                              disabled={sizeComparisonValue === "unspecified"}
+                            />
                           </FormControl>
                         </FormItem>
                       )}
@@ -319,6 +328,9 @@ export function FilterAddModModal({
                                       ) ?? []
                                     );
                               }}
+                              disabled={archiveOrDeleteValue.includes(
+                                "deleteIt"
+                              )}
                             />
                           </FormControl>
                           <FormLabel>Skip the inbox (Archive it)</FormLabel>
@@ -383,6 +395,7 @@ export function FilterAddModModal({
                           <Select
                             defaultValue={field.value}
                             onValueChange={field.onChange}
+                            disabled={!addLabelValue}
                           >
                             <FormControl>
                               <SelectTrigger>
@@ -419,6 +432,9 @@ export function FilterAddModModal({
                                       ) ?? []
                                     );
                               }}
+                              disabled={archiveOrDeleteValue.includes(
+                                "skipInbox"
+                              )}
                             />
                           </FormControl>
                           <FormLabel>Delete it</FormLabel>
@@ -463,6 +479,9 @@ export function FilterAddModModal({
                                       ) ?? []
                                     );
                               }}
+                              disabled={importantOrNotValue.includes(
+                                "notImportant"
+                              )}
                             />
                           </FormControl>
                           <FormLabel>Always mark it as important</FormLabel>
@@ -492,6 +511,9 @@ export function FilterAddModModal({
                                       ) ?? []
                                     );
                               }}
+                              disabled={importantOrNotValue.includes(
+                                "important"
+                              )}
                             />
                           </FormControl>
                           <FormLabel>Never mark it as important</FormLabel>
@@ -526,6 +548,7 @@ export function FilterAddModModal({
                           <Select
                             defaultValue={field.value}
                             onValueChange={field.onChange}
+                            disabled={!categorizeValue}
                           >
                             <FormControl>
                               <SelectTrigger>
