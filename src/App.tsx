@@ -47,6 +47,9 @@ function App() {
       google.accounts.oauth2.revoke(token.access_token, () => {});
       gapi.client.setToken(null);
     }
+    setCategories([]);
+    setCustomLabels([]);
+    setFilters([]);
     setAuthed(false);
   }
 
