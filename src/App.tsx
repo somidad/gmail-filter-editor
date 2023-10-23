@@ -253,16 +253,26 @@ function App() {
         </TableBody>
       </Table>
       <Separator />
-      <div className="flex justify-center space-x-8">
-        <a
-          href="https://github.com/somidad/gmail-filter-editor"
-          target="_blank"
-        >
-          <Github />
-        </a>
-        <a href="https://buymeacoffee.com/somidad" target="_blank">
-          <Heart />
-        </a>
+      <div className="space-y-8">
+        <div className="flex justify-center space-x-8">
+          <a
+            href="https://github.com/somidad/gmail-filter-editor"
+            target="_blank"
+          >
+            <Github />
+          </a>
+          <a href="https://buymeacoffee.com/somidad" target="_blank">
+            <Heart />
+          </a>
+        </div>
+        <div className="flex justify-center">
+          <a
+            href="https://gist.github.com/somidad/449b7009680f24c0cf3f9eaa18f57595"
+            target="_blank"
+          >
+            Privacy Policy
+          </a>
+        </div>
       </div>
     </div>
   );
