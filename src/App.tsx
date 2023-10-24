@@ -146,6 +146,8 @@ function App() {
     setClient(client);
   }, []);
 
+  console.log(import.meta.env.BASE_URL);
+
   return (
     <div className="space-y-4">
       <div className="flex justify-between">
