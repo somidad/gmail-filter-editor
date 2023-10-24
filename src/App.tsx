@@ -266,12 +266,7 @@ function App() {
           </a>
         </div>
         <div className="flex justify-center">
-          <a
-            href="https://gist.github.com/somidad/449b7009680f24c0cf3f9eaa18f57595"
-            target="_blank"
-          >
-            Privacy Policy
-          </a>
+          <a href="/privacy">Privacy Policy</a>
         </div>
       </div>
     </div>
