@@ -5,9 +5,11 @@ import App from './App.tsx'
 import './index.css'
 import { Privacy } from './Privacy.tsx'
 
+console.log(import.meta.env.BASE_URL)
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Routes>
         <Route path="/*" element={<App />} />
         <Route path="/privacy" element={<Privacy />} />
