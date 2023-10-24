@@ -146,8 +146,6 @@ function App() {
     setClient(client);
   }, []);
 
-  console.log(import.meta.env.BASE_URL);
-
   return (
     <div className="space-y-4">
       <div className="flex justify-between">
@@ -268,7 +266,7 @@ function App() {
           </a>
         </div>
         <div className="flex justify-center">
-          <a href="/privacy">Privacy Policy</a>
+          <a href="/#privacy">Privacy Policy</a>
         </div>
       </div>
     </div>
