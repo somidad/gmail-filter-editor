@@ -42,15 +42,18 @@ import { Filter } from "./api/filter";
 import { Criteria } from "./api/criteria";
 import { ActionInput } from "./api/action";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs";
+import { ForwardingAddresss } from "./api/forwardingAddress";
 
 const FormSchema = Criteria.merge(ActionInput).extend({
   addLabel: z.boolean().default(false),
+  toForward: z.boolean().default(false),
   categorize: z.boolean().default(false),
 });
 
 type Props = {
   categories: z.infer<typeof Label>[];
   labels: z.infer<typeof Label>[];
+  forwardingAddresses: z.infer<typeof ForwardingAddresss>[];
   open: boolean;
   onOpenChange: (opened: boolean) => void;
   onSave: (filter: Omit<z.infer<typeof Filter>, "id">) => void;
@@ -59,6 +62,7 @@ type Props = {
 export function FilterAddModModal({
   categories,
   labels,
+  forwardingAddresses,
   open,
   onOpenChange,
   onSave,
@@ -70,6 +74,7 @@ export function FilterAddModModal({
   const sizeComparisonValue = form.watch("sizeComparison");
   const archiveOrDeleteValue = form.watch("archiveOrDelete");
   const addLabelValue = form.watch("addLabel");
+  const toForwardValue = form.watch("toForward");
   const importantOrNotValue = form.watch("importantOrNot");
   const categorizeValue = form.watch("categorize");
 
@@ -89,6 +94,7 @@ export function FilterAddModModal({
       star,
       addLabel,
       label,
+      toForward,
       forward,
       notSpam,
       importantOrNot,
@@ -141,7 +147,7 @@ export function FilterAddModModal({
       action: {
         addLabelIds,
         removeLabelIds,
-        forward,
+        forward: toForward ? forward : "",
       },
     };
     onSave(filter);
@@ -408,6 +414,56 @@ export function FilterAddModModal({
                                   {name}
                                 </SelectItem>
                               ))}
+                            </SelectContent>
+                          </Select>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="flex justify-between items-center space-x-2">
+                    <span>
+                      <FormField
+                        control={form.control}
+                        name="toForward"
+                        render={({ field }) => (
+                          <FormItem className="flex space-x-2 space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <FormLabel>Forwarding it to:</FormLabel>
+                          </FormItem>
+                        )}
+                      />
+                    </span>
+                    <FormField
+                      control={form.control}
+                      name="forward"
+                      render={({ field }) => (
+                        <FormItem className="flex-auto">
+                          <Select
+                            defaultValue={field.value}
+                            onValueChange={field.onChange}
+                            disabled={!toForwardValue}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Choose an address" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {forwardingAddresses.map(
+                                ({ forwardingEmail }) => (
+                                  <SelectItem
+                                    key={forwardingEmail}
+                                    value={forwardingEmail}
+                                  >
+                                    {forwardingEmail}
+                                  </SelectItem>
+                                )
+                              )}
                             </SelectContent>
                           </Select>
                         </FormItem>

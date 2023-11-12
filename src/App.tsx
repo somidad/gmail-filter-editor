@@ -12,12 +12,16 @@ import { z } from "zod";
 import { Filter } from "./api/filter";
 import { ActionLabel, ParsedAction, parseAction } from "./api/action";
 import { CriteriaLabel } from "./api/criteria";
+import { ForwardingAddresss } from "./api/forwardingAddress";
 
 function App() {
   const [client, setClient] = useState<any>();
   const [authed, setAuthed] = useState(false);
   const [categories, setCategories] = useState<z.infer<typeof Label>[]>([]);
   const [customLabels, setCustomLabels] = useState<z.infer<typeof Label>[]>([]);
+  const [forwardingAddresses, setForwardingAddresses] = useState<
+    z.infer<typeof ForwardingAddresss>[]
+  >([]);
   const [filters, setFilters] = useState<z.infer<typeof Filter>[]>([]);
   const [modalOpened, openModal] = useState(false);
 
@@ -76,6 +80,28 @@ function App() {
       });
   }
 
+  function getForwradingAddressList() {
+    (gapi.client as any).gmail.users.settings.forwardingAddresses
+      .list({
+        userId: "me",
+      })
+      .then((response: any) => {
+        if (!response.result) {
+          throw Error("response.result does not exist");
+        }
+        const forwardingAddresses = z
+          .array(ForwardingAddresss)
+          .parse(response.result.forwardingAddresses)
+          .filter(
+            ({ verificationStatus }) => verificationStatus === "accepted"
+          );
+        setForwardingAddresses(forwardingAddresses);
+      })
+      .catch((reason: any) => {
+        console.error(reason);
+      });
+  }
+
   function getFilterList() {
     (gapi.client as any).gmail.users.settings.filters
       .list({
@@ -95,6 +121,7 @@ function App() {
 
   function refresh() {
     getLabelList();
+    getForwradingAddressList();
     getFilterList();
   }
 
@@ -171,6 +198,7 @@ function App() {
           <FilterAddModModal
             categories={categories}
             labels={customLabels}
+            forwardingAddresses={forwardingAddresses}
             open={modalOpened}
             onOpenChange={openModal}
             onSave={requestToAddFilter}
