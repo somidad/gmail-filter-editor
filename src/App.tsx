@@ -279,7 +279,7 @@ function App() {
         </TableBody>
       </Table>
       <Separator />
-      <div className="flex justify-around">
+      <div className="flex justify-center space-x-8">
         <div>
           <a href="/#help">Help</a>
         </div>
@@ -288,7 +288,7 @@ function App() {
         </div>
       </div>
       <div>
-        <div className="flex justify-around">
+        <div className="flex justify-center space-x-8">
           <div>
             <a
               href="https://github.com/somidad/gmail-filter-editor"
