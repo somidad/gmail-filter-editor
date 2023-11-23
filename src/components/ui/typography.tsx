@@ -20,6 +20,14 @@ export function H3({ children }: Props) {
   );
 }
 
+export function H4({ children }: Props) {
+  return (
+    <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
+      {children}
+    </h4>
+  );
+}
+
 export function UL({ children }: Props) {
   return <ul className="my-6 ml-6 list-disc [&>li]:mt-2">{children}</ul>;
 }

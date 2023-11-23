@@ -18,7 +18,6 @@
 
 - Creating a new filter
   - 'Apply the label' action is supported only with the existing labels
-  - 'Forward' action is not supported
   - 'Send Template' action is not supported
   - 'Applying the filter to matching conversations' is not supported
 - Updating the exsiting filter is not supported

@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { Github, Heart, Trash2, RefreshCw, LogIn, LogOut } from "lucide-react";
+import { Trash2, RefreshCw, LogIn, LogOut } from "lucide-react";
 import { apiKey, client_id } from "./credentials";
 import { FilterAddModModal } from "./FilterAddModModal";
 import { CATEGORY_ID_NAMES, Label } from "./api/labels";
-import { HelpModal } from "./HelpModal";
 import { H3, UL } from "./components/ui/typography";
 import { Button } from "./components/ui/button";
 import { Table, TableBody, TableCell, TableRow } from "./components/ui/table";
@@ -178,7 +177,6 @@ function App() {
       <div className="flex justify-between">
         <H3>Gmail Filter Editor</H3>
         <div className="space-x-2">
-          <HelpModal />
           {authed ? (
             <Button variant="outline" onClick={signOut}>
               <LogOut />
@@ -281,20 +279,29 @@ function App() {
         </TableBody>
       </Table>
       <Separator />
-      <div className="space-y-8">
-        <div className="flex justify-center space-x-8">
-          <a
-            href="https://github.com/somidad/gmail-filter-editor"
-            target="_blank"
-          >
-            <Github />
-          </a>
-          <a href="https://buymeacoffee.com/somidad" target="_blank">
-            <Heart />
-          </a>
+      <div className="flex justify-around">
+        <div>
+          <a href="/#help">Help</a>
         </div>
-        <div className="flex justify-center">
+        <div>
           <a href="/#privacy">Privacy Policy</a>
+        </div>
+      </div>
+      <div>
+        <div className="flex justify-around">
+          <div>
+            <a
+              href="https://github.com/somidad/gmail-filter-editor"
+              target="_blank"
+            >
+              GitHub
+            </a>
+          </div>
+          <div>
+            <a href="https://buymeacoffee.com/somidad" target="_blank">
+              Support me
+            </a>
+          </div>
         </div>
       </div>
     </div>
