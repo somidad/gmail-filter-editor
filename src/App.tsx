@@ -218,7 +218,7 @@ function App() {
       )}
       {authed && (
         <div className="flex justify-end space-x-2">
-          <Button variant="outline" onClick={refresh}>
+          <Button variant="outline" onClick={refresh} disabled={numFetches > 0}>
             <RefreshCw />
           </Button>
           <FilterAddModModal
@@ -304,6 +304,7 @@ function App() {
                   <Button
                     variant="destructive"
                     onClick={() => deleteFilter(id)}
+                    disabled={numFetches > 0}
                   >
                     <Trash2 />
                   </Button>
