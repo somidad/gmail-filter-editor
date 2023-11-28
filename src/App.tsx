@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Trash2, RefreshCw, LogOut } from "lucide-react";
-import { apiKey, client_id } from "./credentials";
 import { FilterAddModModal } from "./FilterAddModModal";
 import { CATEGORY_ID_NAMES, Label } from "./api/labels";
 import { H3, UL } from "./components/ui/typography";
@@ -12,6 +11,9 @@ import { Filter } from "./api/filter";
 import { ActionLabel, ParsedAction, parseAction } from "./api/action";
 import { CriteriaLabel } from "./api/criteria";
 import { ForwardingAddresss } from "./api/forwardingAddress";
+
+const apiKey = import.meta.env.VITE_GCP_API_KEY;
+const client_id = import.meta.env.VITE_GCP_CLIENT_ID;
 
 function App() {
   const [client, setClient] = useState<any>();
