@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Trash2, RefreshCw, LogIn, LogOut } from "lucide-react";
+import { Trash2, RefreshCw, LogOut } from "lucide-react";
 import { apiKey, client_id } from "./credentials";
 import { FilterAddModModal } from "./FilterAddModModal";
 import { CATEGORY_ID_NAMES, Label } from "./api/labels";
@@ -177,17 +177,18 @@ function App() {
       <div className="flex justify-between">
         <H3>Gmail Filter Editor</H3>
         <div className="space-x-2">
-          {authed ? (
+          {authed && (
             <Button variant="outline" onClick={signOut}>
               <LogOut />
-            </Button>
-          ) : (
-            <Button onClick={signIn}>
-              <LogIn />
             </Button>
           )}
         </div>
       </div>
+      {!authed && (
+        <div className="flex justify-center">
+          <Button onClick={signIn}>Login with your Gmail account</Button>
+        </div>
+      )}
       {authed && (
         <div className="flex justify-end space-x-2">
           <Button variant="outline" onClick={refresh}>
