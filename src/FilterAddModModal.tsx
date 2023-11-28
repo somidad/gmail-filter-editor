@@ -57,6 +57,7 @@ type Props = {
   open: boolean;
   onOpenChange: (opened: boolean) => void;
   onSave: (filter: Omit<z.infer<typeof Filter>, "id">) => void;
+  isFetching: boolean;
 };
 
 export function FilterAddModModal({
@@ -66,6 +67,7 @@ export function FilterAddModModal({
   open,
   onOpenChange,
   onSave,
+  isFetching,
 }: Props) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -632,7 +634,9 @@ export function FilterAddModModal({
           </form>
         </Form>
         <DialogFooter>
-          <Button onClick={form.handleSubmit(onSubmit)}>Add</Button>
+          <Button onClick={form.handleSubmit(onSubmit)} disabled={isFetching}>
+            Add
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

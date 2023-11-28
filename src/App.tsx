@@ -11,6 +11,7 @@ import { Filter } from "./api/filter";
 import { ActionLabel, ParsedAction, parseAction } from "./api/action";
 import { CriteriaLabel } from "./api/criteria";
 import { ForwardingAddresss } from "./api/forwardingAddress";
+import { cn } from "./lib/utils";
 
 const apiKey = import.meta.env.VITE_GCP_API_KEY;
 const client_id = import.meta.env.VITE_GCP_CLIENT_ID;
@@ -221,7 +222,7 @@ function App() {
       {authed && (
         <div className="flex justify-end space-x-2">
           <Button variant="outline" onClick={refresh} disabled={numFetches > 0}>
-            <RefreshCw />
+            <RefreshCw className={cn({ "animate-spin": numFetches > 0 })} />
           </Button>
           <FilterAddModModal
             categories={categories}
@@ -230,6 +231,7 @@ function App() {
             open={modalOpened}
             onOpenChange={openModal}
             onSave={requestToAddFilter}
+            isFetching={numFetches > 0}
           />
         </div>
       )}
