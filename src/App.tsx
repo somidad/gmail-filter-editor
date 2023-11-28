@@ -205,6 +205,13 @@ function App() {
       )}
       <Table>
         <TableBody>
+          {authed && !filters.length && (
+            <TableRow>
+              <TableCell className="flex justify-center">
+                There is no filter yet. Why don't you try adding one?
+              </TableCell>
+            </TableRow>
+          )}
           {filters.map(({ id, criteria, action }) => {
             const parsedAction = parseAction(action);
             return (
