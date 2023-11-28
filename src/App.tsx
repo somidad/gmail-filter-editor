@@ -16,6 +16,7 @@ import { ForwardingAddresss } from "./api/forwardingAddress";
 function App() {
   const [client, setClient] = useState<any>();
   const [authed, setAuthed] = useState(false);
+  const [numFetches, setNumFetches] = useState(0);
   const [categories, setCategories] = useState<z.infer<typeof Label>[]>([]);
   const [customLabels, setCustomLabels] = useState<z.infer<typeof Label>[]>([]);
   const [forwardingAddresses, setForwardingAddresses] = useState<
@@ -57,15 +58,18 @@ function App() {
   }
 
   function getLabelList() {
-    (gapi.client as any).gmail.users.labels
-      .list({
-        userId: "me",
-      })
+    setNumFetches((value) => value + 1);
+    fetch(
+      `https://gmail.googleapis.com/gmail/v1/users/me/labels?key=${apiKey}`,
+      {
+        headers: {
+          Authorization: `Bearer ${gapi.client.getToken().access_token}`,
+        },
+      }
+    )
+      .then((response) => response.json())
       .then((response: any) => {
-        if (!response.result) {
-          throw Error("response.result does not exist");
-        }
-        const labels = z.array(Label).parse(response.result.labels);
+        const labels = z.array(Label).parse(response.labels);
 
         const categories = labels.filter(
           ({ id, name }) => id === name && id.startsWith("CATEGORY_")
@@ -76,21 +80,27 @@ function App() {
           .filter(({ id, name }) => id !== name)
           .sort((a, b) => a.name.localeCompare(b.name));
         setCustomLabels(customLabels);
+      })
+      .finally(() => {
+        setNumFetches((value) => value - 1);
       });
   }
 
   function getForwradingAddressList() {
-    (gapi.client as any).gmail.users.settings.forwardingAddresses
-      .list({
-        userId: "me",
-      })
+    setNumFetches((value) => value + 1);
+    fetch(
+      `https://gmail.googleapis.com/gmail/v1/users/me/settings/forwardingAddresses?key=${apiKey}`,
+      {
+        headers: {
+          Authorization: `Bearer ${gapi.client.getToken().access_token}`,
+        },
+      }
+    )
+      .then((response) => response.json())
       .then((response: any) => {
-        if (!response.result) {
-          throw Error("response.result does not exist");
-        }
         const forwardingAddresses = z
           .array(ForwardingAddresss)
-          .parse(response.result.forwardingAddresses)
+          .parse(response.forwardingAddresses)
           .filter(
             ({ verificationStatus }) => verificationStatus === "accepted"
           );
@@ -98,23 +108,32 @@ function App() {
       })
       .catch((reason: any) => {
         console.error(reason);
+      })
+      .finally(() => {
+        setNumFetches((value) => value - 1);
       });
   }
 
   function getFilterList() {
-    (gapi.client as any).gmail.users.settings.filters
-      .list({
-        userId: "me",
-      })
+    setNumFetches((value) => value + 1);
+    fetch(
+      `https://gmail.googleapis.com/gmail/v1/users/me/settings/filters?key=${apiKey}`,
+      {
+        headers: {
+          Authorization: `Bearer ${gapi.client.getToken().access_token}`,
+        },
+      }
+    )
+      .then((response) => response.json())
       .then((response: any) => {
-        if (!response.result) {
-          throw Error("response.result does not exists");
-        }
-        const filters = z.array(Filter).parse(response.result.filter);
+        const filters = z.array(Filter).parse(response.filter);
         setFilters(filters);
       })
       .catch((reason: any) => {
         console.error(reason);
+      })
+      .finally(() => {
+        setNumFetches((value) => value - 1);
       });
   }
 
@@ -125,6 +144,7 @@ function App() {
   }
 
   function requestToAddFilter(filter: Omit<z.infer<typeof Filter>, "id">) {
+    setNumFetches((value) => value + 1);
     (gapi.client as any).gmail.users.settings.filters
       .create({
         userId: "me",
@@ -136,10 +156,14 @@ function App() {
       })
       .catch((reason: unknown) => {
         console.error(reason);
+      })
+      .finally(() => {
+        setNumFetches((value) => value - 1);
       });
   }
 
   function deleteFilter(id: string) {
+    setNumFetches((value) => value + 1);
     (gapi.client as any).gmail.users.settings.filters
       .delete({
         userId: "me",
@@ -150,6 +174,9 @@ function App() {
       })
       .catch((reason: any) => {
         console.error(reason);
+      })
+      .finally(() => {
+        setNumFetches((value) => value - 1);
       });
   }
 
