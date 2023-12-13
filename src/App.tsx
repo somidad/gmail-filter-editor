@@ -154,13 +154,12 @@ function App() {
         ...filter,
       })
       .then((_response: unknown) => {
+        setNumFetches((value) => value - 1);
         openModal(false);
         refresh();
       })
       .catch((reason: unknown) => {
         console.error(reason);
-      })
-      .finally(() => {
         setNumFetches((value) => value - 1);
       });
   }
@@ -173,12 +172,11 @@ function App() {
         id,
       })
       .then(() => {
+        setNumFetches((value) => value - 1);
         refresh();
       })
       .catch((reason: any) => {
         console.error(reason);
-      })
-      .finally(() => {
         setNumFetches((value) => value - 1);
       });
   }
