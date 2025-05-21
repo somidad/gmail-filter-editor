@@ -17,7 +17,7 @@ const apiKey = import.meta.env.VITE_GCP_API_KEY;
 const client_id = import.meta.env.VITE_GCP_CLIENT_ID;
 
 function App() {
-  const [client, setClient] = useState<any>();
+  const [client, setClient] = useState<google.accounts.oauth2.TokenClient>();
   const [authed, setAuthed] = useState(false);
   const [numFetches, setNumFetches] = useState(0);
   const [categories, setCategories] = useState<z.infer<typeof Label>[]>([]);
@@ -75,14 +75,14 @@ function App() {
         headers: {
           Authorization: `Bearer ${gapi.client.getToken().access_token}`,
         },
-      }
+      },
     )
       .then((response) => response.json())
       .then((response: any) => {
         const labels = z.array(Label).parse(response.labels);
 
         const categories = labels.filter(
-          ({ id, name }) => id === name && id.startsWith("CATEGORY_")
+          ({ id, name }) => id === name && id.startsWith("CATEGORY_"),
         );
         setCategories(categories);
 
@@ -104,7 +104,7 @@ function App() {
         headers: {
           Authorization: `Bearer ${gapi.client.getToken().access_token}`,
         },
-      }
+      },
     )
       .then((response) => response.json())
       .then((response: any) => {
@@ -112,11 +112,11 @@ function App() {
           .array(ForwardingAddresss)
           .parse(response.forwardingAddresses)
           .filter(
-            ({ verificationStatus }) => verificationStatus === "accepted"
+            ({ verificationStatus }) => verificationStatus === "accepted",
           );
         setForwardingAddresses(forwardingAddresses);
       })
-      .catch((reason: any) => {
+      .catch((reason: unknown) => {
         console.error(reason);
       })
       .finally(() => {
@@ -132,14 +132,14 @@ function App() {
         headers: {
           Authorization: `Bearer ${gapi.client.getToken().access_token}`,
         },
-      }
+      },
     )
       .then((response) => response.json())
       .then((response: any) => {
         const filters = z.array(Filter).parse(response.filter);
         setFilters(filters);
       })
-      .catch((reason: any) => {
+      .catch((reason: unknown) => {
         console.error(reason);
       })
       .finally(() => {
@@ -160,7 +160,7 @@ function App() {
         userId: "me",
         ...filter,
       })
-      .then((_response: unknown) => {
+      .then(() => {
         setNumFetches((value) => value - 1);
         openModal(false);
         refresh();
@@ -260,7 +260,7 @@ function App() {
                     {Object.entries(criteria)
                       .filter(
                         ([key, value]) =>
-                          key !== "size" && key !== "sizeComparison" && value
+                          key !== "size" && key !== "sizeComparison" && value,
                       )
                       .map(([key, value]) => (
                         <li key={key}>
@@ -280,7 +280,7 @@ function App() {
                     {Object.entries(parsedAction)
                       .filter(
                         ([key, value]) =>
-                          key !== "category" && key !== "label" && value
+                          key !== "category" && key !== "label" && value,
                       )
                       .map(([key, value]) => (
                         <li key={key}>
@@ -304,7 +304,7 @@ function App() {
                       <li>
                         Apply the label:{" "}
                         {customLabels.find(
-                          ({ id }) => id === parsedAction.label
+                          ({ id }) => id === parsedAction.label,
                         )?.name ?? "(unknown)"}
                       </li>
                     )}
