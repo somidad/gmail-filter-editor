@@ -15,8 +15,8 @@ import { CriteriaLabel } from "@/api/criteria";
 import { ForwardingAddresss } from "@/api/forwardingAddress";
 import { cn } from "@/lib/utils";
 
-const apiKey = process.env.NEXT_PUBLIC_GCP_API_KEY;
-const client_id = process.env.NEXT_PUBLIC_GCP_CLIENT_ID;
+const apiKey = process.env.NEXT_PUBLIC_GCP_API_KEY ?? '';
+const client_id = process.env.NEXT_PUBLIC_GCP_CLIENT_ID ?? '';
 
 function App() {
   console.log({apiKey, client_id})
