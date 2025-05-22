@@ -8,16 +8,16 @@ import {
   STARRED,
   TRASH,
   UNREAD,
-} from "./api/labels";
+} from "@/api/labels";
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTrigger,
-} from "./components/ui/dialog";
+} from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
-import { Button } from "./components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -25,24 +25,24 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./components/ui/form";
+} from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { Input } from "./components/ui/input";
-import { Checkbox } from "./components/ui/checkbox";
-import { H3 } from "./components/ui/typography";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { H3 } from "@/components/ui/typography";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./components/ui/select";
+} from "@/components/ui/select";
 import { z } from "zod";
-import { Filter } from "./api/filter";
-import { Criteria } from "./api/criteria";
-import { ActionInput } from "./api/action";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs";
-import { ForwardingAddresss } from "./api/forwardingAddress";
+import { Filter } from "@/api/filter";
+import { Criteria } from "@/api/criteria";
+import { ActionInput } from "@/api/action";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ForwardingAddresss } from "@/api/forwardingAddress";
 
 const FormSchema = Criteria.merge(ActionInput).extend({
   addLabel: z.boolean().default(false),

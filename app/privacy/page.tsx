@@ -1,14 +1,22 @@
-import Markdown from "react-markdown";
-import readme from "../README.md?raw";
-import { H3, H4, UL } from "./components/ui/typography";
-import { Button } from "./components/ui/button";
-import { ArrowLeft } from "lucide-react";
+'use client'
 
-export function Help() {
+import Markdown from "react-markdown";
+import { H3, H4, UL } from "@/components/ui/typography";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
+import { useEffect, useState } from "react";
+
+export default function Privacy() {
+  const [content, setContent] = useState('');
+
+  useEffect(() => {
+    fetch('/PRIVACY.md').then((res) => res.text()).then((text) => setContent(text));
+  }, [])
+  
   return (
     <div className="space-y-4">
       <div className="flex justify-start">
-        <Button variant="outline" onClick={() => window.location.assign("/#")}>
+        <Button variant="outline" onClick={() => history.back()}>
           <ArrowLeft />
         </Button>
       </div>
@@ -17,14 +25,9 @@ export function Help() {
           h2: ({ children }) => <H3>{children}</H3>,
           h3: ({ children }) => <H4>{children}</H4>,
           ul: ({ children }) => <UL>{children}</UL>,
-          a: ({ children, ...props }) => (
-            <a className="underline" {...props}>
-              {children}
-            </a>
-          ),
         }}
       >
-        {readme}
+        {content}
       </Markdown>
     </div>
   );

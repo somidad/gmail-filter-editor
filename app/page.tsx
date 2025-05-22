@@ -1,22 +1,25 @@
+'use client'
+
 import { useEffect, useState } from "react";
 import { Trash2, RefreshCw, LogOut } from "lucide-react";
-import { FilterAddModModal } from "./FilterAddModModal";
-import { CATEGORY_ID_NAMES, Label } from "./api/labels";
-import { H3, UL } from "./components/ui/typography";
-import { Button } from "./components/ui/button";
-import { Table, TableBody, TableCell, TableRow } from "./components/ui/table";
-import { Separator } from "./components/ui/separator";
+import { FilterAddModModal } from "@/components/FilterAddModModal";
+import { CATEGORY_ID_NAMES, Label } from "@/api/labels";
+import { H3, UL } from "@/components/ui/typography";
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { Separator } from "@/components/ui/separator";
 import { z } from "zod";
-import { Filter } from "./api/filter";
-import { ActionLabel, ParsedAction, parseAction } from "./api/action";
-import { CriteriaLabel } from "./api/criteria";
-import { ForwardingAddresss } from "./api/forwardingAddress";
-import { cn } from "./lib/utils";
+import { Filter } from "@/api/filter";
+import { ActionLabel, ParsedAction, parseAction } from "@/api/action";
+import { CriteriaLabel } from "@/api/criteria";
+import { ForwardingAddresss } from "@/api/forwardingAddress";
+import { cn } from "@/lib/utils";
 
-const apiKey = import.meta.env.VITE_GCP_API_KEY;
-const client_id = import.meta.env.VITE_GCP_CLIENT_ID;
+const apiKey = process.env.NEXT_PUBLIC_GCP_API_KEY;
+const client_id = process.env.NEXT_PUBLIC_GCP_CLIENT_ID;
 
 function App() {
+  console.log({apiKey, client_id})
   const [client, setClient] = useState<google.accounts.oauth2.TokenClient>();
   const [authed, setAuthed] = useState(false);
   const [numFetches, setNumFetches] = useState(0);
@@ -327,10 +330,10 @@ function App() {
       <Separator />
       <div className="flex justify-center space-x-8">
         <div>
-          <a href="/#help">Help</a>
+          <a href="/help">Help</a>
         </div>
         <div>
-          <a href="/#privacy">Privacy Policy</a>
+          <a href="/privacy">Privacy Policy</a>
         </div>
       </div>
       <div>
