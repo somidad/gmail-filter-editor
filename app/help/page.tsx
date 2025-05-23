@@ -1,24 +1,17 @@
-'use client'
-
 import Markdown from "react-markdown";
 import { H3, H4, UL } from "@/components/ui/typography";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
-import { useEffect, useState } from "react";
+import { readFileSync } from "fs";
+import { join } from "path";
+import { cwd } from "process";
+import { BackButton } from "@/components/BackButton";
 
-export default function Help() {
-  const [content, setContent] = useState('');
-
-  useEffect(() => {
-    fetch('/README.md').then((res) => res.text()).then((text) => setContent(text));
-  }, [])
+export default async function Help() {
+  const content = readFileSync(join(cwd(), 'public', 'README.md'), 'utf-8');
   
   return (
     <div className="space-y-4">
       <div className="flex justify-start">
-        <Button variant="outline" onClick={() => history.back()}>
-          <ArrowLeft />
-        </Button>
+        <BackButton />
       </div>
       <Markdown
         components={{
