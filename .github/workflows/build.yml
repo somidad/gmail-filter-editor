@@ -18,13 +18,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: 인사하기
-        run: |
-          echo "안녕하세요, ${{ github.event.inputs.name }}님!"
-          echo "선택된 환경: ${{ github.event.inputs.environment }}"
-
-      - name: 추가 작업 예시
-        run: |
-          echo "여기에 필요한 다른 작업들을 추가할 수 있습니다."
-          ls -la
+      - name: Use Node.js LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - name: Install deps
+        run: npm install
