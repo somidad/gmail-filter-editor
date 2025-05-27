@@ -1,1 +1,30 @@
+name: Build
 
+on:
+  workflow_dispatch: # 이 부분이 수동 실행을 가능하게 합니다.
+    inputs: # (선택 사항) 수동 실행 시 입력 받을 파라미터 정의
+      environment:
+        description: '배포 환경'
+        required: false
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: 인사하기
+        run: |
+          echo "안녕하세요, ${{ github.event.inputs.name }}님!"
+          echo "선택된 환경: ${{ github.event.inputs.environment }}"
+
+      - name: 추가 작업 예시
+        run: |
+          echo "여기에 필요한 다른 작업들을 추가할 수 있습니다."
+          ls -la
