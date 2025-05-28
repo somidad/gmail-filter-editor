@@ -38,12 +38,12 @@ function App() {
         "https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest",
       ],
     });
-    const access_token = sessionStorage.getItem("access_token");
-    if (access_token) {
-      gapi.client.setToken({ access_token });
-      setAuthed(true);
-      refresh();
-    }
+    // const access_token = sessionStorage.getItem("access_token");
+    // if (access_token) {
+    //   gapi.client.setToken({ access_token });
+    //   setAuthed(true);
+    //   refresh();
+    // }
   }
 
   function signIn() {
@@ -203,7 +203,7 @@ function App() {
         if (resp.error) {
           throw resp;
         }
-        sessionStorage.setItem("access_token", resp.access_token);
+        // sessionStorage.setItem("access_token", resp.access_token);
         setAuthed(true);
         refresh();
       },
