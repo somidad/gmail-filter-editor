@@ -3,6 +3,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: build
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -14,8 +15,8 @@ jobs:
         run: npm install
       - name: Create .env file
         run: |
-          echo "NEXT_PUBLIC_GCP_API_KEY=\${{ secrets.GCP_API_KEY }}" > .env
-          echo "NEXT_PUBLIC_GCP_CLIENT_ID=\${{ secrets.GCP_CLIENT_ID }}" >> .env
+          echo "NEXT_PUBLIC_GCP_API_KEY=${{ secrets.GCP_API_KEY }}" > .env
+          echo "NEXT_PUBLIC_GCP_CLIENT_ID=${{ secrets.GCP_CLIENT_ID }}" >> .env
       - name: Run build
         run: npm run build
       - name: Commit and push changes
