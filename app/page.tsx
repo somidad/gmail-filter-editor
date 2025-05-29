@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useEffect, useState } from "react";
 import { Trash2, RefreshCw, LogOut } from "lucide-react";
@@ -15,11 +15,10 @@ import { CriteriaLabel } from "@/api/criteria";
 import { ForwardingAddresss } from "@/api/forwardingAddress";
 import { cn } from "@/lib/utils";
 
-const apiKey = process.env.NEXT_PUBLIC_GCP_API_KEY ?? '';
-const client_id = process.env.NEXT_PUBLIC_GCP_CLIENT_ID ?? '';
+const apiKey = process.env.NEXT_PUBLIC_GCP_API_KEY ?? "";
+const client_id = process.env.NEXT_PUBLIC_GCP_CLIENT_ID ?? "";
 
 function App() {
-  console.log({apiKey, client_id})
   const [client, setClient] = useState<google.accounts.oauth2.TokenClient>();
   const [authed, setAuthed] = useState(false);
   const [numFetches, setNumFetches] = useState(0);
