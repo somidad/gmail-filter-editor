@@ -28,12 +28,23 @@ The App operates as a static web page (client-side application). All data proces
 
 There is no separate server for the App's operation; therefore, your Gmail filter information or account details are not transmitted to or stored on any servers owned or operated by the App developer or any third party associated with the App itself.
 
+Your Gmail filter rules and access token (temporary credential of your Gmail account that the App uses to communicate with Google's API server) are temporarily stored in your browser's memory. When you leave the App, the stored data is immediately discarded and no longer accessible.
+
+For your information, 'leaving the app' even includes navigating to 'Help' page or 'Privacy Policy' page.
+And you may need to sign in again when you visit again or navigate back to the App.
+
 ### 5. Third-Party Services
 
 The only third-party service directly integrated for the core functionality of this App is Google (for authentication and Gmail API access). We encourage you to review Google's Privacy Policy: [https://policies.google.com/privacy](https://policies.google.com/privacy)
 
 ### 6. Data Security
-As the App does not store your data directly, data security primarily relies on Google's OAuth 2.0 authentication mechanism, the security of your Google Account itself, and the security of your web browser.
+
+All data is exchanged between your web browser and Google's API server encrypted with Transport Layer Security (TLS) protocol.
+
+Your Gmail filter rules and access token (temporary credential of your Gmail account that the App uses to communicate with Google's API server) are temporarily stored in your browser's memory. When you leave the App, the stored data is immediately discarded and no longer accessible.
+
+For your information, 'leaving the app' even includes navigating to 'Help' page or 'Privacy Policy' page.
+And you may need to sign in again when you visit again or navigate back to the App.
 
 ### 7. Children's Privacy
 
