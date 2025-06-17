@@ -9,6 +9,13 @@ const nextConfig = (phase: string): NextConfig => {
 	return {
 		/* config options here */
 		async headers() {
+      const cspHeader = `
+        default-src 'self';
+        script-src 'self' https://apis.google.com https://accounts.google.com 'unsafe-inline';
+        frame-src 'self' https://content.googleapis.com;
+        connect-src 'self' https://gmail.googleapis.com;
+        style-src 'self' 'unsafe-inline';
+      `
 			return [
 				{
 					source: "/(.*)",
@@ -19,6 +26,14 @@ const nextConfig = (phase: string): NextConfig => {
 								? "max-age=31536000; includeSubDomains; preload"
 								: "max-age=0",
 						},
+            {
+              key: "Content-Security-Policy",
+              value: cspHeader.replace(/\s{2,}/g, " ").trim(),
+            },
+            {
+              key: 'Cross-Origin-Opener-Policy',
+              value: 'same-origin',
+            }
 					],
 				},
 			];
