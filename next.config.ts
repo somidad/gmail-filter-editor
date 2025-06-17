@@ -27,6 +27,10 @@ const nextConfig = (phase: string): NextConfig => {
 								: "max-age=0",
 						},
             {
+              key: 'Access-Control-Allow-Origin',
+              value: isProd ? 'https://gfilter.app' : '*',
+            },
+            {
               key: "Content-Security-Policy",
               value: cspHeader.replace(/\s{2,}/g, " ").trim(),
             },
