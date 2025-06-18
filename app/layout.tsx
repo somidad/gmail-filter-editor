@@ -26,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased p-8`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased p-[8px]`}
       >
         <Script
           src="https://apis.google.com/js/api.js"
