@@ -31,12 +31,16 @@ function App() {
   const [modalOpened, openModal] = useState(false);
 
   async function initGoogleApiClient() {
-    await gapi.client.init({
-      apiKey,
-      discoveryDocs: [
-        "https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest",
-      ],
-    });
+    try {
+      await gapi.client.init({
+        apiKey,
+        discoveryDocs: [
+          "https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest",
+        ],
+      });
+    } catch (error) {
+      console.error(error);
+    }
     // const access_token = sessionStorage.getItem("access_token");
     // if (access_token) {
     //   gapi.client.setToken({ access_token });
@@ -46,6 +50,7 @@ function App() {
   }
 
   function signIn() {
+    console.log({ client })
     if (!client) {
       return;
     }
