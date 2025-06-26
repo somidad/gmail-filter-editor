@@ -50,7 +50,6 @@ function App() {
   }
 
   function signIn() {
-    console.log({ client })
     if (!client) {
       return;
     }
