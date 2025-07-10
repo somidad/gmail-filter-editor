@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# dev, testing, casa assessment, etc.
+csp-hash
+serve.json
+
