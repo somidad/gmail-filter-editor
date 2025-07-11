@@ -1,5 +1,4 @@
 const { chromium } = require("playwright");
-const { writeFileSync } = require("fs");
 
 const PATHS = ["/", "/help", "/privacy", "/nowhere"];
 
@@ -31,11 +30,11 @@ const handleConsoleMsg = (consoleMsg) => {
   }
 };
 
-const buildServeConfig = (hashes) => {
+const buildCloudflareWorker = (hashes) => {
   const HEADERS = [
     {
       key: "Access-Control-Allow-Origin",
-      value: "http://localhost",
+      value: "https://gfilter.app",
     },
     {
       key: "Cross-Origin-Opener-Policy",
@@ -53,37 +52,51 @@ const buildServeConfig = (hashes) => {
   ];
   const SELF_WITH_QUOTE = "'self'";
 
-  const serveConfig = {
-    headers: PATHS.map((path) => {
-      const source = path === "/nowhere" ? "**/*" : path;
-      const headers = structuredClone(HEADERS);
-      const csp = {
-        "default-src": SELF_WITH_QUOTE,
-        "connect-src": SELF_WITH_QUOTE,
-        "form-action": SELF_WITH_QUOTE,
-        "frame-ancestors": SELF_WITH_QUOTE,
-        "frame-src": SELF_WITH_QUOTE,
-      };
-      for (const src in hashes[path]) {
-        if (!(src in csp)) {
-          csp[src] = SELF_WITH_QUOTE;
-        }
-        csp[src] = [csp[src], ...hashes[path][src]].join(" ");
+  const headers = PATHS.map((path) => {
+    const source =
+      path === "/nowhere" ? "      default:" : `      case '${path}:'`;
+    const headers = structuredClone(HEADERS);
+    const csp = {
+      "default-src": SELF_WITH_QUOTE,
+      "connect-src": SELF_WITH_QUOTE,
+      "form-action": SELF_WITH_QUOTE,
+      "frame-ancestors": SELF_WITH_QUOTE,
+      "frame-src": SELF_WITH_QUOTE,
+    };
+    for (const src in hashes[path]) {
+      if (!(src in csp)) {
+        csp[src] = SELF_WITH_QUOTE;
       }
-      headers.push({
-        key: "Content-Security-Policy",
-        value: Object.entries(csp)
-          .map(([key, value]) => `${key} ${value};`)
-          .join(" "),
-      });
-      return {
-        source,
-        headers,
-      };
-    }),
-  };
+      csp[src] = [csp[src], ...hashes[path][src]].join(" ");
+    }
+    headers.push({
+      key: "Content-Security-Policy",
+      value: Object.entries(csp)
+        .map(([key, value]) => `${key} ${value};`)
+        .join(" "),
+    });
+    const statements = headers.map((header) => {
+      return `        newResponse.headers.set("${header.key}", "${header.value}");`;
+    });
+    if (source !== "default:") statements.push("        break;");
+    return [source, statements.join("\n")].join("\n");
+  }).join("\n");
 
-  return serveConfig;
+  const worker = `
+export default {
+  async fetch(request) {
+    const response = await fetch(request);
+    const newResponse = new Response(response.body, response);
+    const url = new URL(request.url);
+    const pathname = url.pathname.toLocaleLowerCase();
+    switch (pathname) {
+${headers}
+    }
+    return newResponse;
+  }
+}
+`;
+  return worker;
 };
 
 async function main() {
@@ -107,10 +120,7 @@ async function main() {
   await context.close();
   await browser.close();
 
-  console.log(hashes);
-
-  const serveConfig = buildServeConfig(hashes);
-  writeFileSync("../docs/serve.json", JSON.stringify(serveConfig));
+  buildCloudflareWorker(hashes);
 }
 
 main();
