@@ -41,6 +41,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "csp-hash-from-html": "github:apaatsio/csp-hash-from-html",
+    "playwright": "^1.54.0",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.0",
     "typescript": "^5"
