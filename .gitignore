@@ -41,6 +41,4 @@ yarn-error.log*
 next-env.d.ts
 
 # dev, testing, casa assessment, etc.
-csp-hash
-serve.json
-
+docs/serve.base.json
