@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "serve": "cd docs && npx serve -c serve.base.json",
+    "csp": "cd scripts && node csp.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -40,8 +42,11 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "csp-hash-from-html": "github:apaatsio/csp-hash-from-html",
+    "playwright": "^1.54.0",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.24.3"
   }
 }
