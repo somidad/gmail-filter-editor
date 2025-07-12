@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "serve": "cd docs && npx serve -c serve.base.json"
+    "serve": "cd docs && npx serve -c serve.base.json",
+    "csp": "cd scripts && node csp.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

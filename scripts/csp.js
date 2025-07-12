@@ -1,3 +1,4 @@
+const { writeFileSync } = require("fs");
 const { chromium } = require("playwright");
 
 const PATHS = ["/", "/help", "/privacy", "/nowhere"];
@@ -54,7 +55,7 @@ const buildCloudflareWorker = (hashes) => {
 
   const headers = PATHS.map((path) => {
     const source =
-      path === "/nowhere" ? "      default:" : `      case '${path}:'`;
+      path === "/nowhere" ? "      default:" : `      case '${path}':`;
     const headers = structuredClone(HEADERS);
     const csp = {
       "default-src": SELF_WITH_QUOTE,
@@ -96,7 +97,7 @@ ${headers}
   }
 }
 `;
-  return worker;
+  writeFileSync("../cf-worker/src/index.js", worker);
 };
 
 async function main() {
