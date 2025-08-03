@@ -13,7 +13,8 @@ const handleConsoleMsg = (consoleMsg) => {
 
   const srcMatch = text.match(SRC_PATTERN);
   if (!srcMatch) return;
-  const src = srcMatch[2];
+  // const src = srcMatch[2];
+  const src = "default-src"; // Always use default-src for simplicity
   if (!(src in pathRef)) pathRef[src] = [];
 
   const urlMatch = text.match(SCRIPT_URL_PATTERN);
@@ -59,10 +60,10 @@ const buildCloudflareWorker = (hashes) => {
     const headers = structuredClone(HEADERS);
     const csp = {
       "default-src": SELF_WITH_QUOTE,
-      "connect-src": SELF_WITH_QUOTE,
-      "form-action": SELF_WITH_QUOTE,
-      "frame-ancestors": SELF_WITH_QUOTE,
-      "frame-src": SELF_WITH_QUOTE,
+      // "connect-src": SELF_WITH_QUOTE,
+      // "form-action": SELF_WITH_QUOTE,
+      // "frame-ancestors": SELF_WITH_QUOTE,
+      // "frame-src": SELF_WITH_QUOTE,
     };
     for (const src in hashes[path]) {
       if (!(src in csp)) {
@@ -111,6 +112,14 @@ async function main() {
   for (const path of PATHS) {
     hashes[path] = {};
     pathRef = hashes[path];
+    if (path === "/") {
+      pathRef["default-src"] = [
+        "https://apis.google.com",
+        "https://accounts.google.com",
+        "https://content.googleapis.com",
+        "https://gmail.googleapis.com",
+      ];
+    }
     await page.goto(`http://localhost:3000${path}`);
     for (const key in pathRef) {
       pathRef[key] = Array.from(new Set(pathRef[key]));
