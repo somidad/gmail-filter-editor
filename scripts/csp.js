@@ -118,6 +118,7 @@ async function main() {
         "https://accounts.google.com",
         "https://content.googleapis.com",
         "https://gmail.googleapis.com",
+        "https://content-gmail.googleapis.com/",
       ];
     }
     await page.goto(`http://localhost:3000${path}`);
