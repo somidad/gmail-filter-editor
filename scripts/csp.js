@@ -6,13 +6,16 @@ const PATHS = ["/", "/help", "/privacy", "/nowhere"];
 let pathRef;
 const handleConsoleMsg = (consoleMsg) => {
   const SRC_PATTERN = /Note (also )?that '(.+?)' was not explicitly set/;
+  const INLINE_STYLE_PATTERN =
+    "Refused to apply inline style because it violates the following Content Security Policy directive";
   const SCRIPT_URL_PATTERN = /Refused to load the script '(.+?)' because/;
   const SCRIPT_HASH_PATTERN = /a hash \(('.+?')\)/;
 
   const text = consoleMsg.text();
 
   const srcMatch = text.match(SRC_PATTERN);
-  if (!srcMatch) return;
+  const inlineStyleMatch = text.startsWith(INLINE_STYLE_PATTERN);
+  if (!srcMatch && !inlineStyleMatch) return;
   // const src = srcMatch[2];
   const src = "default-src"; // Always use default-src for simplicity
   if (!(src in pathRef)) pathRef[src] = [];
